@@ -1,0 +1,145 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--gutter);
+  background: var(--ink);
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* The same warm practical that lights the hero, so the curtain lift reads as
+   one continuous room rather than two screens. */
+.glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 42% at 10% 34%, rgba(255, 122, 24, 0.2), transparent 70%),
+    radial-gradient(40% 36% at 92% 84%, rgba(76, 141, 255, 0.14), transparent 72%);
+  animation: breathe 7s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Everything below is visible by default. Nothing on this screen depends on
+   JavaScript to become readable — GSAP sets its own `from` state, so a failed
+   tween degrades to static text rather than an empty panel. */
+.center {
+  position: relative;
+  z-index: 1;
+}
+
+.welcome {
+  margin: 0 0 clamp(0.8rem, 1.8vh, 1.3rem);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(0.62rem, 1.1vw, 0.74rem);
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+}
+
+.mark {
+  margin: 0;
+  font-family: var(--font-display), "Arial Narrow", sans-serif;
+  font-weight: 400;
+  font-size: clamp(3rem, 11vw, 9.5rem);
+  line-height: 0.86;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--haze);
+}
+
+.markLine {
+  display: block;
+}
+
+/* The gradient fill only applies where background-clip: text is supported.
+   Outside that, the line keeps a solid colour instead of rendering as
+   transparent text on a dark panel — i.e. invisible. */
+.markLineAccent {
+  color: var(--ember-soft);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .markLineAccent {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      100deg,
+      var(--haze) 0%,
+      var(--ember-soft) 48%,
+      var(--ember) 84%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.suffix {
+  margin: clamp(0.9rem, 2.2vh, 1.5rem) 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(0.66rem, 1.2vw, 0.8rem);
+  letter-spacing: 0.44em;
+  text-transform: uppercase;
+  color: var(--haze-dim);
+}
+
+/* ============================================================== readout == */
+
+.readout {
+  position: absolute;
+  z-index: 1;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(2rem, 6vh, 3.5rem);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.counter {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--ember);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  flex: 1;
+  height: 1px;
+  background: rgba(242, 236, 228, 0.12);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(to right, var(--ember), var(--ember-soft));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    display: none;
+  }
+}

@@ -1,0 +1,544 @@
+/* ============================================================== structure == */
+
+/* The hero pins itself to the viewport; the section that follows carries its
+   own opaque background and rises over it. Nothing is duplicated in scroll
+   height, so there is no dead space. */
+.hero {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.sticky {
+  position: absolute;
+  inset: 0;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ================================================================= video == */
+
+/* A 48px-wide JPEG scaled to fill — it arrives in one packet and is already
+   blurry, so no filter is needed to soften it. */
+.ambientStill {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  z-index: 0;
+  background-image: url("/media/hero-blur.jpg");
+  background-size: cover;
+  background-position: center 22%;
+  filter: saturate(1.5) brightness(0.6);
+  transform: scale(1.1);
+}
+
+.ambientVideo {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  object-fit: cover;
+  filter: blur(64px) saturate(1.5) brightness(0.62);
+  transform: scale(1.18);
+  z-index: 0;
+  opacity: 0.85;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.6s var(--ease-cine);
+}
+
+.heroReady .video {
+  opacity: 1;
+}
+
+/* ============================================================== grading == */
+
+/* Base grade: crushes the blacks and pulls the bottom third down so the type
+   always lands on something quiet, whatever the frame is doing. */
+.grade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(6, 7, 10, 0.72) 0%,
+      rgba(6, 7, 10, 0.24) 26%,
+      rgba(6, 7, 10, 0.5) 58%,
+      rgba(6, 7, 10, 0.92) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(6, 7, 10, 0.86) 0%,
+      rgba(6, 7, 10, 0.42) 42%,
+      rgba(6, 7, 10, 0.05) 74%
+    );
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    118% 92% at 62% 38%,
+    transparent 32%,
+    rgba(4, 5, 8, 0.62) 78%,
+    rgba(4, 5, 8, 0.9) 100%
+  );
+}
+
+/* The two lights in the room: a warm practical off frame-left and the cold
+   spill of a monitor from the lower right. */
+.practical {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  mix-blend-mode: screen;
+  opacity: 0.72;
+  background:
+    radial-gradient(52% 46% at 8% 30%, rgba(255, 122, 24, 0.3), transparent 68%),
+    radial-gradient(46% 40% at 96% 88%, rgba(76, 141, 255, 0.24), transparent 70%);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* =============================================================== content == */
+
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  padding: var(--gutter);
+  padding-bottom: clamp(6.5rem, 14vh, 10rem);
+  max-width: min(100%, 68rem);
+  pointer-events: none;
+}
+
+.content a,
+.content button {
+  pointer-events: auto;
+}
+
+.tagline {
+  margin: 0 0 clamp(1.1rem, 2.4vh, 2rem);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(0.62rem, 1.1vw, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+  opacity: 0;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: clamp(4.2rem, 15.5vw, 14rem);
+  line-height: 0.8;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--haze);
+}
+
+.nameLine {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Solid colour unless background-clip: text is supported — without the
+   fallback, an unsupported browser renders transparent text on a dark frame. */
+.nameLineAccent {
+  color: var(--ember-soft);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .nameLineAccent {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      100deg,
+      var(--haze) 0%,
+      var(--ember-soft) 46%,
+      var(--ember) 82%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.charMask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.06em;
+}
+
+.char {
+  display: inline-block;
+  will-change: transform;
+  transform: translateY(118%);
+  opacity: 0;
+}
+
+.rule {
+  display: block;
+  width: min(22rem, 42vw);
+  height: 1px;
+  margin: clamp(1.4rem, 3vh, 2.4rem) 0 clamp(1.1rem, 2.2vh, 1.8rem);
+  background: linear-gradient(to right, var(--ember), rgba(255, 122, 24, 0));
+  transform: scaleX(0);
+}
+
+.role {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--haze);
+  opacity: 0;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(0.9rem, 1.15vw, 1.02rem);
+  font-weight: 300;
+  line-height: 1.72;
+  color: var(--haze-dim);
+  opacity: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: clamp(1.3rem, 3vh, 2.1rem) 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--haze-faint);
+  opacity: 0;
+}
+
+.metaDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ember);
+}
+
+.metaLink {
+  color: var(--haze-dim);
+  transition: color 0.4s var(--ease-cine);
+}
+
+.metaLink:hover {
+  color: var(--ember-soft);
+}
+
+/* ============================================================== controls == */
+
+.controls {
+  position: absolute;
+  z-index: 6;
+  right: var(--gutter);
+  top: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+}
+
+.glassButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.62rem 1.05rem;
+  border-radius: 999px;
+  color: var(--haze);
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.45s var(--ease-cine), border-color 0.45s var(--ease-cine),
+    transform 0.45s var(--ease-cine), color 0.45s var(--ease-cine);
+}
+
+.glassButton:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 178, 107, 0.42);
+  color: var(--ember-soft);
+  transform: translateY(-1px);
+}
+
+.glassButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonLabel {
+  line-height: 1;
+  padding-top: 1px;
+}
+
+/* -------------------------------------------------------------- the hint -- */
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.62rem 1.05rem;
+  border-radius: 999px;
+  color: var(--ink);
+  background: linear-gradient(120deg, var(--ember-soft), var(--ember));
+  border: 1px solid rgba(255, 200, 150, 0.5);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 40px rgba(255, 122, 24, 0.28);
+  animation: hintIn 0.9s var(--ease-cine) both, hintFloat 3.4s ease-in-out 0.9s infinite;
+}
+
+.hintPulse {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.hintPulse::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid rgba(6, 7, 10, 0.55);
+  animation: ripple 2.2s ease-out infinite;
+}
+
+@keyframes hintIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hintFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* ============================================================ scroll cue == */
+
+.scrollCue {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: clamp(1.6rem, 4vh, 2.6rem);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem 0.35rem;
+  opacity: 0;
+  color: var(--haze-faint);
+  transition: color 0.5s var(--ease-cine);
+}
+
+.scrollCue:hover {
+  color: var(--ember-soft);
+}
+
+.scrollLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  padding-left: 0.36em;
+}
+
+.scrollTrack {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 58px;
+  background: linear-gradient(
+    to bottom,
+    rgba(242, 236, 228, 0.06),
+    rgba(242, 236, 228, 0.22),
+    rgba(242, 236, 228, 0.02)
+  );
+  overflow: hidden;
+}
+
+.scrollPulse {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 22px;
+  background: linear-gradient(to bottom, transparent, var(--ember));
+  animation: pulseDown 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes pulseDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(280%);
+    opacity: 0;
+  }
+}
+
+/* ============================================================ responsive == */
+
+@media (max-width: 900px) {
+  .controls {
+    top: auto;
+    bottom: clamp(1.4rem, 4vh, 2.4rem);
+    right: var(--gutter);
+    left: var(--gutter);
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .content {
+    padding-bottom: clamp(9rem, 24vh, 13rem);
+    justify-content: center;
+  }
+
+  .scrollCue {
+    left: auto;
+    right: var(--gutter);
+    bottom: clamp(4.6rem, 12vh, 7rem);
+    transform: none;
+  }
+
+  .scrollLabel {
+    display: none;
+  }
+
+  .scrollTrack {
+    height: 42px;
+  }
+}
+
+@media (max-width: 560px) {
+  .video {
+    object-position: center 18%;
+  }
+
+  .buttonLabel {
+    display: none;
+  }
+
+  .glassButton {
+    padding: 0.68rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .meta {
+    flex-wrap: wrap;
+    font-size: 0.66rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .tagline,
+  .role,
+  .subtitle,
+  .meta,
+  .controls,
+  .scrollCue,
+  .char {
+    opacity: 1;
+  }
+
+  .char {
+    transform: none;
+  }
+
+  .rule {
+    transform: scaleX(1);
+  }
+
+  .video {
+    opacity: 1;
+  }
+}

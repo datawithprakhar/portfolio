@@ -1,0 +1,98 @@
+:root {
+  /* Cinematic palette — graded like a night interior lit by one warm practical
+     lamp and the cold spill of a monitor. */
+  --ink: #06070a;
+  --ink-soft: #0d0f14;
+  --ember: #ff7a18;
+  --ember-soft: #ffb26b;
+  --monitor: #4c8dff;
+  --haze: #f2ece4;
+  --haze-dim: rgba(242, 236, 228, 0.58);
+  --haze-faint: rgba(242, 236, 228, 0.28);
+
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-line: rgba(255, 255, 255, 0.14);
+
+  --ease-cine: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: clamp(1.5rem, 5vw, 6rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--ink);
+  color: var(--haze);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* `clip` instead of `hidden`: `hidden` turns the body into a scroll
+     container and silently breaks position: sticky. */
+  overflow-x: clip;
+}
+
+img,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ember-soft);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(255, 122, 24, 0.32);
+  color: var(--haze);
+}
+
+/* Applied to <body> while the preloader is on screen. */
+.introLocked {
+  overflow: hidden;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
