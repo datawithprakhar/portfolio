@@ -200,9 +200,79 @@
 
 .eduItem {
   display: grid;
-  grid-template-columns: 15rem 1fr;
+  grid-template-columns: 15rem 1fr auto;
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: baseline;
+  align-items: start;
+}
+
+.eduBody {
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ cgpa -- */
+
+.cgpa {
+  text-align: right;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid rgba(255, 122, 24, 0.22);
+  border-radius: 2px;
+  background:
+    radial-gradient(140% 180% at 100% 0%, rgba(255, 122, 24, 0.1), transparent 62%),
+    rgba(255, 255, 255, 0.015);
+}
+
+.cgpaValue {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1;
+  color: var(--haze);
+  font-variant-numeric: tabular-nums;
+}
+
+.cgpaOutOf {
+  font-size: 0.55em;
+  color: var(--haze-faint);
+}
+
+.cgpaLabel {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+}
+
+/* ---------------------------------------------------------------- honors -- */
+
+.honors {
+  list-style: none;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.honor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 178, 107, 0.28);
+  background: rgba(255, 122, 24, 0.07);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ember-soft);
+}
+
+.honorIcon {
+  color: var(--ember);
+  flex-shrink: 0;
 }
 
 .eduTitle {
@@ -227,11 +297,61 @@
   margin-top: clamp(3.5rem, 9vh, 6rem);
   padding-top: clamp(2rem, 5vh, 3rem);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerTop {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+.footerBottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-top: clamp(2.25rem, 5vh, 3.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.copyright {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--haze-faint);
+}
+
+.socialRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--haze-dim);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.4s var(--ease-cine);
+}
+
+.socialLink:hover {
+  border-color: rgba(255, 178, 107, 0.42);
+  color: var(--ember-soft);
+  transform: translateY(-1px);
 }
 
 .footerLead {
@@ -270,6 +390,11 @@
   .eduItem {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .cgpa {
+    justify-self: start;
+    text-align: left;
   }
 
   .entryMeta {

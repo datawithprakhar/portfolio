@@ -84,16 +84,47 @@ export default function Profile({ id = "profile" }) {
             {education.map((item) => (
               <li key={item.title} className={styles.eduItem}>
                 <span className={styles.period}>{item.period}</span>
-                <div>
+                <div className={styles.eduBody}>
                   <h3 className={styles.eduTitle}>{item.title}</h3>
                   <p className={styles.eduDetail}>{item.detail}</p>
+                  {item.honors ? (
+                    <ul className={styles.honors}>
+                      {item.honors.map((honor) => (
+                        <li key={honor} className={styles.honor}>
+                          <svg
+                            className={styles.honorIcon}
+                            viewBox="0 0 24 24"
+                            width="11"
+                            height="11"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M12 2.8l2.5 5.4 5.9.6-4.4 4 1.2 5.8L12 15.7l-5.2 2.9 1.2-5.8-4.4-4 5.9-.6z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                          {honor}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
+                {item.cgpa ? (
+                  <div className={styles.cgpa}>
+                    <p className={styles.cgpaValue}>
+                      {item.cgpa}
+                      <span className={styles.cgpaOutOf}>/{item.cgpaOutOf}</span>
+                    </p>
+                    <p className={styles.cgpaLabel}>CGPA</p>
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className={`${styles.resume} ${styles.reveal}`}>
+        <div id="resume" className={`${styles.resume} ${styles.reveal}`}>
           <div>
             <p className={styles.eyebrow}>Resume</p>
             <h3 className={styles.resumeTitle}>The full record, on one page.</h3>
@@ -124,18 +155,6 @@ export default function Profile({ id = "profile" }) {
             </a>
           </div>
         </div>
-
-        <footer className={`${styles.footer} ${styles.reveal}`}>
-          <p className={styles.footerLead}>Open to conversations about data platform work.</p>
-          <div className={styles.footerLinks}>
-            <a className={styles.footerLink} href={`mailto:${profile.email}`}>
-              {profile.email}
-            </a>
-            <a className={styles.footerLink} href={`tel:${profile.phone}`}>
-              {profile.phone}
-            </a>
-          </div>
-        </footer>
       </div>
     </section>
   );

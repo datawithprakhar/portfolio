@@ -1,0 +1,66 @@
+.nav {
+  position: fixed;
+  z-index: 50;
+  top: clamp(1.1rem, 2.5vh, 1.8rem);
+  right: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--glass-line);
+  background: rgba(6, 7, 10, 0.55);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.9s var(--ease-cine), transform 0.9s var(--ease-cine);
+}
+
+.navVisible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.link {
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--haze-dim);
+  white-space: nowrap;
+  transition: color 0.35s var(--ease-cine), background 0.35s var(--ease-cine);
+}
+
+.link:hover {
+  color: var(--ember-soft);
+  background: rgba(255, 122, 24, 0.09);
+}
+
+/* Mobile: a full-width strip that scrolls sideways if it must. Tap targets
+   stay ≥40px tall. */
+@media (max-width: 720px) {
+  .nav {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .link {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.58rem;
+    flex-shrink: 0;
+  }
+}

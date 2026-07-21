@@ -33,6 +33,8 @@ body {
 
 html {
   scroll-behavior: smooth;
+  /* Anchored sections stop clear of the fixed nav. */
+  scroll-padding-top: 4.5rem;
   -webkit-text-size-adjust: 100%;
 }
 

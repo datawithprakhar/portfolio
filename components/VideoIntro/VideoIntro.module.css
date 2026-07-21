@@ -274,7 +274,7 @@
   position: absolute;
   z-index: 6;
   right: var(--gutter);
-  top: var(--gutter);
+  bottom: clamp(1.6rem, 4vh, 2.6rem);
   display: flex;
   align-items: center;
   gap: 0.6rem;

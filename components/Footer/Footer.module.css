@@ -1,0 +1,116 @@
+.section {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(to bottom, var(--ink-soft), var(--ink));
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.inner {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: clamp(4rem, 10vh, 7rem) var(--gutter) clamp(2.5rem, 6vh, 4rem);
+}
+
+.eyebrow {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+
+.lead {
+  margin: 0 0 clamp(1.75rem, 4vh, 2.75rem);
+  max-width: 24ch;
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--haze);
+}
+
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+}
+
+.contactLink {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--haze-dim);
+  border-bottom: 1px solid rgba(255, 122, 24, 0.35);
+  padding-bottom: 0.35rem;
+  transition: color 0.4s var(--ease-cine), border-color 0.4s var(--ease-cine);
+}
+
+.contactLink:hover {
+  color: var(--ember-soft);
+  border-color: var(--ember);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-top: clamp(3rem, 7vh, 4.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.copyright {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--haze-faint);
+}
+
+.socialRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--haze-dim);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.4s var(--ease-cine);
+}
+
+.socialLink:hover {
+  border-color: rgba(255, 178, 107, 0.42);
+  color: var(--ember-soft);
+  transform: translateY(-1px);
+}
+
+.reveal {
+  will-change: transform, opacity;
+}
+
+@media (max-width: 560px) {
+  .contacts {
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
