@@ -5,6 +5,8 @@ import gsap from "gsap";
 import useIsomorphicLayoutEffect from "@/lib/useIsomorphicLayoutEffect";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { about, education, marquee, resume, timeline, profile } from "@/lib/profile";
+import Flag from "@/components/Flag/Flag";
+import CompanyLogo from "@/components/CompanyLogo/CompanyLogo";
 import styles from "./Profile.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -63,10 +65,20 @@ export default function Profile({ id = "profile" }) {
             <li key={`${entry.company}-${entry.period}`} className={`${styles.entry} ${styles.reveal}`}>
               <div className={styles.entryMeta}>
                 <span className={styles.period}>{entry.period}</span>
-                <span className={styles.place}>{entry.place}</span>
+                <span className={styles.place}>
+                  <Flag code={entry.country} className={styles.flag} />
+                  {entry.place}
+                </span>
               </div>
               <div className={styles.entryBody}>
-                <h3 className={styles.company}>{entry.company}</h3>
+                <div className={styles.companyRow}>
+                  <CompanyLogo
+                    slug={entry.logo?.slug}
+                    name={entry.company}
+                    initials={entry.logo?.initials}
+                  />
+                  <h3 className={styles.company}>{entry.company}</h3>
+                </div>
                 <p className={styles.jobTitle}>{entry.title}</p>
                 <ul className={styles.points}>
                   {entry.lines.map((line) => (

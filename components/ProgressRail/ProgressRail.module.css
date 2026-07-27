@@ -1,0 +1,146 @@
+/* A precision instrument, not a menu: hairline rail, small ticks, labels that
+   only surface on approach. Sits clear of the top nav and the hero controls. */
+
+.rail {
+  position: fixed;
+  z-index: 45;
+  right: clamp(1rem, 2.2vw, 1.9rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s var(--ease-cine);
+}
+
+.railVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------------------------------------------------------------- track -- */
+
+.track {
+  position: absolute;
+  right: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(242, 236, 228, 0.14);
+  overflow: hidden;
+}
+
+.trackFill {
+  position: absolute;
+  inset: 0;
+  transform-origin: top center;
+  background: linear-gradient(to bottom, var(--ember-soft), var(--ember));
+  box-shadow: 0 0 8px rgba(255, 122, 24, 0.5);
+  transition: transform 0.7s var(--ease-cine);
+}
+
+/* ---------------------------------------------------------------- ticks -- */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.4rem, 3.4vh, 2.4rem);
+  position: relative;
+}
+
+.item {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tick {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  /* Generous hit area around a deliberately small mark. */
+  padding: 0.4rem 0 0.4rem 0.6rem;
+}
+
+.tickLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--haze-faint);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.45s var(--ease-cine), transform 0.45s var(--ease-cine),
+    color 0.45s var(--ease-cine);
+}
+
+.tickMark {
+  display: block;
+  width: 7px;
+  height: 1px;
+  background: rgba(242, 236, 228, 0.32);
+  transition: width 0.5s var(--ease-cine), background 0.5s var(--ease-cine),
+    box-shadow 0.5s var(--ease-cine);
+}
+
+/* Passed sections stay faintly warm — a trail, not a reset. */
+.tickPassed .tickMark {
+  background: rgba(255, 178, 107, 0.45);
+}
+
+.tickActive .tickMark {
+  width: 16px;
+  background: var(--ember);
+  box-shadow: 0 0 10px rgba(255, 122, 24, 0.85);
+}
+
+.tickActive .tickLabel {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--ember-soft);
+}
+
+/* Hovering the rail reveals every label at once, so it doubles as a contents
+   list without ever shouting for attention. */
+.rail:hover .tickLabel,
+.tick:focus-visible .tickLabel {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.tick:hover .tickMark {
+  width: 16px;
+  background: var(--ember-soft);
+}
+
+.tick:hover .tickLabel {
+  color: var(--haze);
+}
+
+/* ----------------------------------------------------------- responsive -- */
+
+/* Phones already have the scrolling nav strip, and screen width is precious —
+   the rail would crowd the content it's meant to orient. */
+@media (max-width: 900px) {
+  .rail {
+    display: none;
+  }
+}
+
+/* Short viewports: tighten the spacing before the rail runs past the fold. */
+@media (max-height: 620px) {
+  .list {
+    gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trackFill,
+  .tickMark,
+  .tickLabel {
+    transition: none;
+  }
+}

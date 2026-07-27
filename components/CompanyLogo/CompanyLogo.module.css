@@ -1,0 +1,38 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex-shrink: 0;
+}
+
+.mark {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  /* Real brand marks are usually full-colour; desaturating and lifting them
+     to the haze tone keeps them from fighting the film grade. */
+  filter: grayscale(1) brightness(1.6);
+  opacity: 0.85;
+}
+
+/* Default state: no logo file present, so this badge is what actually ships
+   until real files are added. Styled as a deliberate design element, not an
+   error state. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 178, 107, 0.28);
+  background: rgba(255, 122, 24, 0.08);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ember-soft);
+}

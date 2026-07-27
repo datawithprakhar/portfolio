@@ -113,6 +113,45 @@ export default function VideoIntro({ nextSectionId = "profile" }) {
     return () => window.clearTimeout(timer);
   }, [showHint]);
 
+  // Called only from the preloader's tap, which is the gesture browsers
+  // require before audio may play. The sound stays on for one full pass of the
+  // video, then mutes itself — heard once, never nagging.
+  const detachLoopWatchRef = useRef(() => {});
+
+  const startWithSound = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = false;
+    setIsMuted(false);
+    setShowHint(false);
+    video.play().catch(() => {
+      // Refused anyway — fall back to muted rather than a frozen frame.
+      video.muted = true;
+      setIsMuted(true);
+      video.play().catch(() => {});
+    });
+
+    let lastTime = video.currentTime;
+    const onTimeUpdate = () => {
+      // A loop shows up as the clock jumping backwards.
+      if (video.currentTime < lastTime - 0.5) {
+        video.muted = true;
+        setIsMuted(true);
+        detachLoopWatchRef.current();
+      }
+      lastTime = video.currentTime;
+    };
+
+    video.addEventListener("timeupdate", onTimeUpdate);
+    detachLoopWatchRef.current = () => {
+      video.removeEventListener("timeupdate", onTimeUpdate);
+      detachLoopWatchRef.current = () => {};
+    };
+  }, []);
+
+  useEffect(() => () => detachLoopWatchRef.current(), []);
+
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
     const ambient = ambientRef.current;
@@ -130,6 +169,8 @@ export default function VideoIntro({ nextSectionId = "profile" }) {
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    // A manual choice overrides the automatic mute-after-one-loop.
+    detachLoopWatchRef.current();
     const next = !video.muted;
     video.muted = next;
     if (!next && video.paused) video.play().catch(() => {});
@@ -221,14 +262,17 @@ export default function VideoIntro({ nextSectionId = "profile" }) {
           { opacity: 1, y: 0, duration: 1.1 },
           "-=0.9"
         );
-      unsubscribe = whenIntroReady(() => timeline.play());
+      unsubscribe = whenIntroReady((withSound) => {
+        timeline.play();
+        if (withSound) startWithSound();
+      });
     }, rootRef);
 
     return () => {
       unsubscribe();
       context.revert();
     };
-  }, []);
+  }, [startWithSound]);
 
   const scrollToNext = useCallback(() => {
     const target = document.getElementById(nextSectionId);
@@ -241,6 +285,7 @@ export default function VideoIntro({ nextSectionId = "profile" }) {
 
   return (
     <section
+      id="intro"
       ref={rootRef}
       className={`${styles.hero} ${isReady ? styles.heroReady : ""}`}
       aria-label="Introduction"

@@ -1,5 +1,6 @@
 import Preloader from "@/components/Preloader/Preloader";
 import Nav from "@/components/Nav/Nav";
+import ProgressRail from "@/components/ProgressRail/ProgressRail";
 import VideoIntro from "@/components/VideoIntro/VideoIntro";
 import Profile from "@/components/Profile/Profile";
 import Dashboard from "@/components/Dashboard/Dashboard";
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <Preloader />
       <Nav />
+      <ProgressRail />
       <main>
         <VideoIntro nextSectionId="profile" />
         <Profile id="profile" />

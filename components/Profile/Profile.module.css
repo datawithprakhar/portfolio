@@ -120,10 +120,29 @@
 }
 
 .place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--font-mono), monospace;
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   color: var(--haze-faint);
+}
+
+.flag {
+  border-radius: 1.5px;
+  flex-shrink: 0;
+  /* A hairline edge keeps the white bands of each flag from bleeding into
+     the dark card background. */
+  outline: 1px solid rgba(255, 255, 255, 0.14);
+  outline-offset: -0.5px;
+}
+
+.companyRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.35rem;
 }
 
 .entryBody {
@@ -137,7 +156,7 @@
 }
 
 .company {
-  margin: 0 0 0.35rem;
+  margin: 0;
   font-family: var(--font-display), sans-serif;
   font-weight: 400;
   font-size: clamp(1.7rem, 3.4vw, 2.5rem);
